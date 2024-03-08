@@ -1,10 +1,10 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
@@ -52,7 +52,19 @@ public class Lime00Test {
 
         String currentUrl = getWebDriver().getCurrentUrl();
 
-        Assertions.assertEquals("https://lime-shop.com/ru_ru/catalog/new",currentUrl);
+        Assertions.assertEquals("https://lime-shop.com/ru_ru/catalog/new", currentUrl);
 
     }
+
+    @Test
+    void menuTest02() {
+
+        $("#AppNavbar .hamburger-menu").click();
+
+        $(".mainmenu__kinds").$(byText("Мужчины")).click();
+
+        $("[href='/ru_ru/catalog/men_blazers'] span").shouldHave(Condition.text("БЛЕЙЗЕРЫ"));
+
+    }
+
 }

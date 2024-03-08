@@ -1,9 +1,12 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class Lime00Test {
 
@@ -35,6 +38,21 @@ public class Lime00Test {
         $(".SearchBox__input").setValue("платье").pressEnter();
 
         $(".CatalogProduct__title").shouldHave(Condition.text("Платье"));
+
+    }
+
+    @Test
+    void menuTest01() {
+
+        $("#AppNavbar .hamburger-menu").click();
+
+        $("[href='/ru_ru/catalog/new'] span").click();
+
+        $("h1").shouldHave(Condition.text("НОВИНКИ"));
+
+        String currentUrl = getWebDriver().getCurrentUrl();
+
+        Assertions.assertEquals("https://lime-shop.com/ru_ru/catalog/new",currentUrl);
 
     }
 }

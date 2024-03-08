@@ -11,6 +11,7 @@ public class Lime00Test {
     void setUp() {
         Configuration.holdBrowserOpen = true;
         Configuration.browserSize = "1920x1080";
+        Configuration.timeout = 10000;
 
         open("https://lime-shop.com/ru_ru");
         sleep(1500);
@@ -23,6 +24,17 @@ public class Lime00Test {
         $(".l-jivo-label").click();
         $("textarea").shouldBe(Condition.visible)
                 .shouldHave(Condition.attribute("placeholder", "Введите сообщение"));
+
+    }
+
+    @Test
+    void searchTest01() {
+
+        $(".SearchBox__button").click();
+
+        $(".SearchBox__input").setValue("платье").pressEnter();
+
+        $(".CatalogProduct__title").shouldHave(Condition.text("Платье"));
 
     }
 }

@@ -1,8 +1,6 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
@@ -15,9 +13,10 @@ public class Lime00Test {
         Configuration.holdBrowserOpen = true;
         Configuration.browserSize = "1920x1080";
         Configuration.timeout = 10000;
+        Configuration.pollingInterval = 1000;
 
         open("https://lime-shop.com/ru_ru");
-        sleep(1500);
+        sleep(3000);
         $("button[data-ok]").click();
     }
 
@@ -26,7 +25,7 @@ public class Lime00Test {
 
         $(".l-jivo-label").click();
         $("textarea").shouldBe(Condition.visible)
-                .shouldHave(Condition.attribute("placeholder", "Введите сообщение"));
+                .shouldHave(Condition.attribute("placeholder", "Ваше сообщение*"));
 
     }
 
@@ -42,6 +41,20 @@ public class Lime00Test {
     }
 
     @Test
+    void searchTest02() {
+
+        $(".SearchBox__button").click();
+
+        $(".SearchBox__input").setValue("2854-529").pressEnter();
+
+        $(".CatalogProduct__title a").click();
+
+        $(".product__article").shouldHave(Condition.text("Арт. 2854-529"));
+
+    }
+
+    @Disabled
+    @Test
     void menuTest01() {
 
         $("#AppNavbar .hamburger-menu").click();
@@ -56,6 +69,7 @@ public class Lime00Test {
 
     }
 
+    @Disabled
     @Test
     void menuTest02() {
 
@@ -67,4 +81,8 @@ public class Lime00Test {
 
     }
 
+    @AfterEach
+    void tearDown() {
+        clearBrowserCookies();
+    }
 }

@@ -54,6 +54,24 @@ public class Lime00Test {
     }
 
     @Test
+    void searchTest03() {
+
+        $(".SearchBox__button").click();
+
+        $(".SearchBox__input").setValue("брюки").pressEnter();
+
+        $(".CatalogProduct__title a").click();
+
+        $(".btn-cart").click();
+
+        open("https://lime-shop.com/ru_ru/cart");
+
+        $(".CustomerCart__main").shouldHave(Condition.text("Брюки"));
+
+    }
+
+
+    @Test
     void menuTest01() {
 
         $("#AppNavbar .hamburger-menu").click();

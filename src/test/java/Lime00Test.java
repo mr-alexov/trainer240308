@@ -53,7 +53,6 @@ public class Lime00Test {
 
     }
 
-    @Disabled
     @Test
     void menuTest01() {
 
@@ -69,7 +68,6 @@ public class Lime00Test {
 
     }
 
-    @Disabled
     @Test
     void menuTest02() {
 
@@ -78,6 +76,19 @@ public class Lime00Test {
         $(".mainmenu__kinds").$(byText("Мужчины")).click();
 
         $("[href='/ru_ru/catalog/men_blazers'] span").shouldHave(Condition.text("БЛЕЙЗЕРЫ"));
+
+    }
+
+    @Test
+    void loginTest01() {
+        $("a[href='/ru_ru#lk'] div").click();
+        $(".btn-outline").click();
+
+        $("[tabindex='1']").setValue("boykovabkru@mailnesia.com");
+        $("[tabindex='2']").setValue("boykovabkru03");
+        $("button[type='submit']").click();
+
+        $x("//button[contains(text(),'Изменить пароль')]").shouldBe(Condition.visible);
 
     }
 

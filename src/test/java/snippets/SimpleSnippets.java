@@ -1,10 +1,12 @@
+package snippets;
+
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
-public class SimpleSnippegs {
+public class SimpleSnippets {
 
     {
 

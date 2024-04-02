@@ -6,23 +6,10 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
-public class Lime00Test {
+public class Lime00Test extends LimeTestBase {
 
     @BeforeEach
     void setUp() {
-
-        // Настройка оставлять браузер открытым или нет.
-        Configuration.holdBrowserOpen = true;
-
-        // Настройка размера экрана
-        Configuration.browserSize = "1920x1080";
-
-        // Настройка таймаута -- сколько мы ждём элементов.
-        Configuration.timeout = 10000;
-
-        // Настройка работы управления браузером -- пауза между запросами за элементами.
-        Configuration.pollingInterval = 1000;
-
         // Открываем страницу
         open("https://lime-shop.com/ru_ru");
 

@@ -10,62 +10,63 @@ public class Lime00Test {
 
     @BeforeEach
     void setUp() {
+
+        // Настройка оставлять браузер открытым или нет.
         Configuration.holdBrowserOpen = true;
+
+        // Настройка размера экрана
         Configuration.browserSize = "1920x1080";
+
+        // Настройка таймаута -- сколько мы ждём элементов.
         Configuration.timeout = 10000;
+
+        // Настройка работы управления браузером -- пауза между запросами за элементами.
         Configuration.pollingInterval = 1000;
 
+        // Открываем страницу
         open("https://lime-shop.com/ru_ru");
+
+        // Ждём три секунды.
         sleep(3000);
         $("button[data-ok]").click();
     }
 
     @Test
-    void firstTest() {
-
+    void checkChatOpens() {
+        // Жмем на кнопку чата и проверяем что окошко чата открылось
         $(".l-jivo-label").click();
         $("textarea").shouldBe(Condition.visible)
                 .shouldHave(Condition.attribute("placeholder", "Ваше сообщение*"));
-
     }
 
     @Test
     void searchTest01() {
-
+        // Кликаем кнопку поиска и вводим запрос, потом проверяем что по запросу нашлись соответствующие товары.
         $(".SearchBox__button").click();
-
         $(".SearchBox__input").setValue("платье").pressEnter();
-
         $(".CatalogProduct__title").shouldHave(Condition.text("Платье"));
 
     }
 
     @Test
     void searchTest02() {
-
+        // Кликаем кнопку поиска и вводим запрос по артиклю, проверяем что нашелся товар с этим артиклем.
         $(".SearchBox__button").click();
-
         $(".SearchBox__input").setValue("2854-529").pressEnter();
-
         $(".CatalogProduct__title a").click();
-
         $(".product__article").shouldHave(Condition.text("Арт. 2854-529"));
 
     }
 
     @Test
-    void searchTest03() {
-
+    void searchAndAddToCart() {
+        // Кликаем кнопку поиска, ищем товар
+        // Добавляем товар в корзину из поиска, проверяем что добавился.
         $(".SearchBox__button").click();
-
         $(".SearchBox__input").setValue("брюки").pressEnter();
-
         $(".CatalogProduct__title a").click();
-
         $(".btn-cart").click();
-
         open("https://lime-shop.com/ru_ru/cart");
-
         $(".CustomerCart__main").shouldHave(Condition.text("Брюки"));
 
     }
@@ -74,20 +75,20 @@ public class Lime00Test {
     @Test
     void menuTest01() {
 
+        // Проверяем что в меню есть пункт Новинки, и переход по нему ведёт на нужную страницу.
+
         $("#AppNavbar .hamburger-menu").click();
-
         $("[href='/ru_ru/catalog/new'] span").click();
-
         $("h1").shouldHave(Condition.text("НОВИНКИ"));
-
         String currentUrl = getWebDriver().getCurrentUrl();
-
         Assertions.assertEquals("https://lime-shop.com/ru_ru/catalog/new", currentUrl);
 
     }
 
     @Test
     void menuTest02() {
+
+        // Проверяем что в меню есть пункт Мужчины, и при переходе на странице есть мужской товар.
 
         $("#AppNavbar .hamburger-menu").click();
 
@@ -99,6 +100,9 @@ public class Lime00Test {
 
     @Test
     void loginTest01() {
+
+        // Проверяем что мы можем залогиниться на сайт с вот таким логином и паролем.
+
         $("a[href='/ru_ru#lk'] div").click();
         $(".btn-outline").click();
 
@@ -112,6 +116,9 @@ public class Lime00Test {
 
     @AfterEach
     void tearDown() {
+        // Убираем куки, чтобы страница снова была "как новенькая".
+        // Потом исправим.
         clearBrowserCookies();
+
     }
 }

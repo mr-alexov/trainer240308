@@ -1,6 +1,9 @@
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.*;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.WebDriver;
+
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
@@ -10,12 +13,20 @@ public class Lime00Test extends LimeTestBase {
 
     @BeforeEach
     void setUp() {
-        // Открываем страницу
-        open("https://lime-shop.com/ru_ru");
 
-        // Ждём три секунды.
-        sleep(3000);
-        $("button[data-ok]").click();
+        Configuration.baseUrl = "https://lime-shop.com";
+
+        open("/favicon.ico");
+        WebDriver currentDriver = WebDriverRunner.getWebDriver();
+        Cookie confirmedCookieData = new Cookie("l-accept-cookies", "true");
+        currentDriver.manage().addCookie(confirmedCookieData);
+
+        // Открываем страницу
+        open("/ru_ru");
+
+        // Код когда мы ждём кнопки согласия на куки.
+        // sleep(3000);
+        // $("button[data-ok]").click();
     }
 
     @Test
@@ -77,7 +88,9 @@ public class Lime00Test extends LimeTestBase {
 
         // Проверяем что в меню есть пункт Мужчины, и при переходе на странице есть мужской товар.
 
-        $("#AppNavbar .hamburger-menu").click();
+        //$("#AppNavbar .hamburger-menu").click();
+
+        $$("#AppNavbar .hamburger-menu").get(0).click();
 
         $(".mainmenu__kinds").$(byText("Мужчины")).click();
 
@@ -86,6 +99,7 @@ public class Lime00Test extends LimeTestBase {
     }
 
     @Test
+    @Order(value = 1)
     void loginTest01() {
 
         // Проверяем что мы можем залогиниться на сайт с вот таким логином и паролем.
@@ -98,6 +112,58 @@ public class Lime00Test extends LimeTestBase {
         $("button[type='submit']").click();
 
         $x("//button[contains(text(),'Изменить пароль')]").shouldBe(Condition.visible);
+
+    }
+
+    @Order(value = 2)
+    void loginTest02() {
+
+        $("form h2").has(Condition.text("Выберите интересующие вас разделы:"));
+
+    }
+
+    @Test
+    void elementsCollectionDemo0() {
+        $(".SearchBox__button").click();
+        $(".SearchBox__input").setValue("платье").pressEnter();
+
+        ElementsCollection filteredCollection =
+        $$(".CatalogProduct__title").filter(Condition.text("льн"));
+
+        filteredCollection.get(0).click();
+    }
+
+    @Test
+    void elementsCollectionDemo1() {
+        $(".SearchBox__button").click();
+        $(".SearchBox__input").setValue("брюки").pressEnter();
+
+        $$(".CatalogProduct__title").shouldHave(CollectionCondition.sizeGreaterThan(10));
+
+        ElementsCollection filteredCollection =
+                $$(".CatalogProduct__title").filter(Condition.text("льн"));
+
+        filteredCollection
+                .asFixedIterable()
+                .stream()
+                .forEach(e -> System.out.println(e.getText()));
+
+    }
+
+    @Test
+    void elementsCollectionDemo2() {
+        $(".SearchBox__button").click();
+        $(".SearchBox__input").setValue("брюки").pressEnter();
+
+        $$(".CatalogProduct__title").shouldHave(CollectionCondition.sizeGreaterThan(10));
+
+        ElementsCollection filteredCollection =
+                $$(".CatalogProduct__content-col").filter(Condition.text("3599"));
+
+        filteredCollection
+                .asFixedIterable()
+                .stream()
+                .forEach(e -> System.out.println(e.getText()));
 
     }
 
